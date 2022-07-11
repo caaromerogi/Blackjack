@@ -6,7 +6,7 @@ const { read } = require('fs');
 function Player(name){
     this.name = name;
     this.prize = 0;
-    this.cards;
+    this.cards = [];
 
     this.sumCards = function(){
         //Code for sum the values of cards in array cards
@@ -89,31 +89,58 @@ function Round(){
         player.name = userName;
         console.log('Comencemos '+ player.name);
 
-        //Validates if the user already has the card in his hand
-        if(player.cards.forEach(element => {
-            element.name === 
-        });)
+        //First round user receives 2 cards
+        firstRound();
+        player.cards.forEach(element => {
+            console.log(element.name+element.suit);  
+        })
+
+        
         
     }
 
+    let firstRound = function(){
+        dealing();
+        dealing();
+    }
+
     //Dealing a card
-    this.dealing = function(){
+    let dealing = function(){
         //Returning a random cart from the array
-        let cardNames = ['A', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+        let cardNames = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
         let suits = ['♣', '♦', '♥', '♠'];
         let cardName = cardNames[Math.floor(Math.random()*cardNames.length)];
-        let suit =suits[Math.floor(Math.random()*suits.length)];
+        let suit = suits[Math.floor(Math.random()*suits.length)];
 
         //Assigning generated properties to card object
         card.name = cardName;
         card.suit = suit;
 
-        return card;
+        //If card is in the hand the dealing function executes again
+        if(validatingCard(card))
+            dealing;
+
+        //If card is not in the hand player gets the card
+        player.addCard(card);
+
 
     }
 
-    //
+    //Validating if a card already exists in the hand of player
+    let validatingCard = function(cardName, cardSuit){
+        let isSameCard = false;
+        //Validates if array is empty
+        if (!player.cards.length){
+            //Search over cards looking if the card already exists
+            player.cards.forEach(userCard => {
+                if(userCard.name === cardName && userCard.suit === cardSuit)
+                    isSameCard = true;
+        })};
+        return isSameCard;
+        
+    }
 
+    
 
 }
 
