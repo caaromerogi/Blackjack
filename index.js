@@ -76,45 +76,43 @@ function Card(){
 
 //Round
 function Round(){
-    let ans;
     let card = new Card();
     let player = new Player();
     this.prize;
 
     
-
     this.startGame = function(){
-        //let readlineSync = require('readline-sync');
+        let readlineSync = require('readline-sync');
 
         console.log("Bienvenido a Blackjack");
-        //let userName = readlineSync.question('Por favor, ingresa tu nombre: ');
+        let userName = readlineSync.question('Por favor, ingresa tu nombre: ');
+        player.name = userName;
+        console.log('Comencemos '+ player.name);
 
-        waitAnswer("Ingresa tu nombre por favor: ");
+        //Validates if the user already has the card in his hand
+        if(player.cards.forEach(element => {
+            element.name === 
+        });)
         
     }
 
-    this.drawing = function(){
-        
+    //Dealing a card
+    this.dealing = function(){
+        //Returning a random cart from the array
+        let cardNames = ['A', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+        let suits = ['♣', '♦', '♥', '♠'];
+        let cardName = cardNames[Math.floor(Math.random()*cardNames.length)];
+        let suit =suits[Math.floor(Math.random()*suits.length)];
+
+        //Assigning generated properties to card object
+        card.name = cardName;
+        card.suit = suit;
+
+        return card;
+
     }
 
-
-    let getAnswer = function(question){
-        const readline = require('readline');
-        return new Promise(resolve => {    
-            const rl = readline.createInterface({
-                input:  process.stdin,
-                output: process.stdout
-            });
-            rl.question(question, (answer) => {
-                resolve(answer);
-                rl.close();
-            });
-        });  
-    }
-
-    let waitAnswer = async function(question){
-        ans = await getAnswer(question);
-    }
+    //
 
 
 }
