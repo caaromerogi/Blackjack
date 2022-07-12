@@ -174,8 +174,8 @@ function Round(){
             let readlineSync = require('readline-sync');
             let newGame = readlineSync.question('¿Quieres jugar otra vez? (Y/N): ');
 
-            switch(newGame){
-                case 'Y':
+            switch(newGame.toLowerCase()){
+                case 'y':
                     playAgain();
                     break;
                 default:
@@ -202,9 +202,9 @@ function Round(){
             let readlineSync = require('readline-sync');
             let anotherCard = readlineSync.question('\n¿Desea otra carta? (Y/N): ');
 
-            switch(anotherCard){
+            switch(anotherCard.toLowerCase()){
                 //If answer Y then we return true in control variable isInGame (The player is still playing)
-                case 'Y':
+                case 'y':
                     isInGame = true;
                     break;
                 //Another case (Answer is N) the player decides to stop the game, control variable isInGame returns false
