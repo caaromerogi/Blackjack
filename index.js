@@ -31,18 +31,36 @@ function Card(){
     let value;
     //once you define the name call the function setValue to set the value
     
-    let setValue = function(){
-        if (/^[A-Za-z]+$/.name){ //regex validation
-            if(name === "J" || name === "Q" || name === "K"){
-                value = 10;
+    
+    this.setValue = function(){
+        let readlineSync = require('readline-sync');
+        if (/^[A-Za-z]+$/.test(name)){
+            switch(name){
+                case 'J':
+                case 'Q':
+                case 'K':
+                    value = 10;
+                    break;
+                default: //If you get an Ace
+                    //Ask to the user what does he want to do
+                    let aceChoice = readlineSync.question('Elija 1 o 2 entre las siguientes opciones \n 1. A = 1 \n 2. A = 11 \n')
+                    switch(Number(aceChoice)){
+                        case 1:
+                            value = 1;
+                            break;
+                        default:
+                            value = 11;
+                            break;
+                    
+                    }
             }
             
-            
-        }
+        }else{value = Number(name)}
+        
     }
     
 
-    //Getter a nd Setter for card name property
+    //Getter and Setter for card name property
     Object.defineProperty(this, 'name',{
         get: function(){
             return name;    
@@ -69,6 +87,12 @@ function Card(){
             }
         }
     })
+
+    Object.defineProperty(this, 'value', {
+        get: function(){
+            return value;
+        }
+    })
     
 }
 
@@ -79,7 +103,7 @@ function Round(){
     let suits = ['♣', '♦', '♥', '♠'];
     this.prize;
 
-    
+    //Starting game
     this.startGame = function(){
         let readlineSync = require('readline-sync');
 
@@ -92,30 +116,38 @@ function Round(){
         firstRound();
     }
 
+    //Starting the first round giving 2 cards to the user
     let firstRound = function(){
         newCard();
         newCard();
         console.log('Estas son sus cartas: ')
         player.cards.forEach(element => { 
-            console.log(element.name+element.suit);  
+            console.log(element.name+element.suit+element.value);  
         })
     }
 
+    //Giving a new card to the player
     let newCard = function(){
+        //Instanciates a new card each time the function is called
         let card = new Card();
+        
+        //Giving the properties to the card
         card.name = getRandomItem(cardNames);
         card.suit = getRandomItem(suits);
-
-        //Validates the card is not repeated
-        if (!sameCard(card.name, card.suite))
-            //If doesn't the same card adds to the hand of player
+        card.setValue();
+        //Validating the card is not repeated
+        if (!sameCard(card.name, card.suite)){
+             //If is not the same card adds to the hand of player
             player.addCard(card);
+        }else{newCard()}
+         
+            
     }
 
+    //Used to get random items from arrays cardName and suits
     let getRandomItem = function(item){
         return item[Math.floor(Math.random()*item.length)]
     }
-
 
     
     //Validating if a card already exists in the hand of player
