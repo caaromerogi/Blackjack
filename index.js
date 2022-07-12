@@ -12,10 +12,9 @@ function Player(name){
     this.sumCards = function(){
         //Code for sum the values of cards in array cards
         let sum = 0;
-        this.cards.forEach(element => { 
-            console.log(element.value);
+        this.cards.forEach(element => {
+            //Getting the player's hand sum
             sum += element.value;
-            
         })
         return sum;
         
@@ -115,7 +114,7 @@ function Round(){
     let player = new Player();
     let cardNames = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
     let suits = ['♣', '♦', '♥', '♠'];
-    this.prize;
+    let prize = 1000;
 
     //Starting game
     this.startGame = function(){
@@ -128,9 +127,21 @@ function Round(){
 
         //First round user receives 2 cards
         firstRound();
-        //Check if win
-        checkWin();
+        //Check if win, lose or still playing
+        checkIsInGame();
+        //Ask for another round
+        anotherRound();
 
+    }
+
+    let playAgain = function() {
+        console.log('Okay '+player.name+ '. Juguemos de nuevo');
+        //First round user receives 2 cards
+        firstRound();
+        //Check if win, lose or still playing
+        checkIsInGame();
+        //Ask for another round
+        anotherRound();
     }
 
     //Starting the first round giving 2 cards to the user
@@ -138,39 +149,93 @@ function Round(){
         newCard();
         newCard();
         console.log('Estas son sus cartas: ')
-        player.cards.forEach(element => { 
-            console.log(element.name+element.suit+element.value);  
+        player.cards.forEach(card => { 
+            console.log(card.name+card.suit);  
         })
     }
 
     let anotherRound = function(){
-        let readlineSync = require('readline-sync');
-        let anotherCard = readlineSync.question('¿Desea otra carta? (Y/N): ');
-        switch(anotherCard){
-            case 'Y':
-                newCard();
-                checkWin();
-                break;
-            case 'N':
-                //finish game    
-
+        //If the value isInGame from checkIsInGame function is true then the player hasn't won and hasn't lose and ask for another card
+        if(checkIsInGame()){     
+            //Giving new card       
+            newCard();
+            //Showing cards in hand
+            console.log('Estas son sus cartas: ')
+                player.cards.forEach(card => { 
+                console.log(card.name+card.suit);  
+            })
+            //Check again if the player is in game (Recursion)
+            checkIsInGame();    
         }
+
+        //If the value isInGame from checkIsInGame function is false then we ask to the player if he wants to play again
+        if (!checkIsInGame()){
+            //Read input from user
+            let readlineSync = require('readline-sync');
+            let newGame = readlineSync.question('¿Quieres jugar otra vez? (Y/N): ');
+
+            switch(newGame){
+                case 'Y':
+                    playAgain();
+                default:
+                    console.log('Nos veremos en otra ocasión, hasta luego!');
+                    console.log('Tu premio acumulado es: '+player.prize);
+            }
+        }
+           
     }
 
-    let checkWin = function(){
+    let checkIsInGame = function(){
+        //Sum of card values of player hand
         let sum = player.sumCards();
-        if (sum<18){
-            //¿Desea continuar?}
-            //If he says no, Finish game
-        }
-        if (sum>=18 && sum<= 21){
-            console.log("You win!!")}
-        if (sum>21){
-            "You lose :("}
-        }
-        
+        //Control variable to detect if the player is still playing(boolean)
+        let isInGame;
 
-    }
+        //If the sum is below 18 then the player can chose between still playing or stop
+        if (sum<18){
+            console.log("Sus cartas suman "+ sum);
+            //Input from user
+            let readlineSync = require('readline-sync');
+            let anotherCard = readlineSync.question('¿Desea otra carta? (Y/N): ');
+
+            switch(anotherCard){
+                //If answer Y then we return true in control variable isInGame (The player is still playing)
+                case 'Y':
+                    isInGame = true;
+                    break;
+                //Another case (Answer is N) the player decides to stop the game, control variable isInGame returns false
+                default:
+                    isInGame = false;
+                    console.log('Tus cartas suman ' + sum);
+                    console.log('Esta vez no fue suficiente, intenta de nuevo');
+                    console.log('Tu premio acumulado es: '+player.prize);
+                    break;
+            }
+        }
+
+        //If the sum is between 18 and 21 the player wins the game and add the prize to the bag prize and the control variable returns false
+        if (sum>=18 && sum<= 21){
+            console.log('Tus cartas suman ' + sum);
+            console.log(":D Ganaste!! Puedes volver a jugar");
+            //Adding prize
+            player.addPrize(prize);
+
+            console.log('Tu premio acumulado es: '+player.prize);
+            //isInGame returns false because the game is finished because the player won
+            isInGame = false;}
+        
+        //If sum is over 21 the player lose, and the control variable isInGame returns false
+        if (sum>21){
+            console.log('Tus cartas suman ' + sum);
+            console.log(':( Perdiste, puedes intentarlo de nuevo');
+            console.log('Tu premio acumulado es: '+player.prize);
+             //isInGame returns false because the game is finished because the player lost
+            isInGame = false;}
+
+        return isInGame;
+        }
+
+    
 
     //Giving a new card to the player
     let newCard = function(){
@@ -185,7 +250,9 @@ function Round(){
         if (!sameCard(card.name, card.suite)){
              //If is not the same card adds to the hand of player
             player.addCard(card);
-        }else{newCard()}
+        }else{
+            //If cards is repeated the function is called again to generate a new card (Recursion)
+            newCard()}
          
             
     }
