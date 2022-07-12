@@ -284,9 +284,9 @@ function Round(){
 
 }
 
-//Test
+//App execution
 const round = new Round();
-
+//Start game
 round.startGame();
 
 
