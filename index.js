@@ -1,6 +1,7 @@
 //--------------OBJECT CONSTRUCTORS-------------
 
 const { read } = require('fs');
+const { platform } = require('os');
 
 //Player
 function Player(name){
@@ -10,6 +11,15 @@ function Player(name){
 
     this.sumCards = function(){
         //Code for sum the values of cards in array cards
+        let sum = 0;
+        this.cards.forEach(element => { 
+            console.log(element.value);
+            sum += element.value;
+            
+        })
+        return sum;
+        
+
     }
     this.addCard = function(card){
         //Code for add a new card to the array of cards
@@ -33,7 +43,10 @@ function Card(){
     
     
     this.setValue = function(){
+        //Allows to get input from user
         let readlineSync = require('readline-sync');
+
+        //Validates regex (if is a letter)
         if (/^[A-Za-z]+$/.test(name)){
             switch(name){
                 case 'J':
@@ -43,7 +56,7 @@ function Card(){
                     break;
                 default: //If you get an Ace
                     //Ask to the user what does he want to do
-                    let aceChoice = readlineSync.question('Elija 1 o 2 entre las siguientes opciones \n 1. A = 1 \n 2. A = 11 \n')
+                    let aceChoice = readlineSync.question('\n El repartidor te dio un As \n Elija 1 o 2 entre las siguientes opciones \n 1. A = 1 \n 2. A = 11 \n')
                     switch(Number(aceChoice)){
                         case 1:
                             value = 1;
@@ -88,6 +101,7 @@ function Card(){
         }
     })
 
+    //Getter value property
     Object.defineProperty(this, 'value', {
         get: function(){
             return value;
@@ -114,6 +128,9 @@ function Round(){
 
         //First round user receives 2 cards
         firstRound();
+        //Check if win
+        checkWin();
+
     }
 
     //Starting the first round giving 2 cards to the user
@@ -124,6 +141,35 @@ function Round(){
         player.cards.forEach(element => { 
             console.log(element.name+element.suit+element.value);  
         })
+    }
+
+    let anotherRound = function(){
+        let readlineSync = require('readline-sync');
+        let anotherCard = readlineSync.question('¿Desea otra carta? (Y/N): ');
+        switch(anotherCard){
+            case 'Y':
+                newCard();
+                checkWin();
+                break;
+            case 'N':
+                //finish game    
+
+        }
+    }
+
+    let checkWin = function(){
+        let sum = player.sumCards();
+        if (sum<18){
+            //¿Desea continuar?}
+            //If he says no, Finish game
+        }
+        if (sum>=18 && sum<= 21){
+            console.log("You win!!")}
+        if (sum>21){
+            "You lose :("}
+        }
+        
+
     }
 
     //Giving a new card to the player
