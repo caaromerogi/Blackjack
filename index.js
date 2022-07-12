@@ -20,8 +20,6 @@ function Player(name){
         this.prize += prize;
     }
 
-    
-
 }
 
 
@@ -67,7 +65,7 @@ function Card(){
         set: function(value){
             //Validates is a String
             if(String(value)){
-                suit === value; 
+                suit = value; 
             }
         }
     })
@@ -90,7 +88,7 @@ function Round(){
         console.log('Comencemos '+ player.name);
 
         //First round user receives 2 cards
-        firstRound();
+        this.firstRound;
         player.cards.forEach(element => {
             console.log(element.name+element.suit);  
         })
@@ -99,26 +97,36 @@ function Round(){
         
     }
 
-    let firstRound = function(){
-        dealing();
-        dealing();
+    this.firstRound = function(){
+        console.log("Estas son tus cartas: ")
+        this.dealing;
+        this.dealing;
+        this.dealing;
+        this.firstRound;
+        player.cards.forEach(element => {
+            console.log(element.name+element.suit);  
+        })
     }
 
+
+
     //Dealing a card
-    let dealing = function(){
+    this.dealing = function(rand1, rand2){
         //Returning a random cart from the array
         let cardNames = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
         let suits = ['♣', '♦', '♥', '♠'];
-        let cardName = cardNames[Math.floor(Math.random()*cardNames.length)];
-        let suit = suits[Math.floor(Math.random()*suits.length)];
+
 
         //Assigning generated properties to card object
-        card.name = cardName;
-        card.suit = suit;
+        card.name = cardNames[rand1];
+        card.suit = suits[rand2];
 
         //If card is in the hand the dealing function executes again
-        if(validatingCard(card))
-            dealing;
+        //if(validatingCard(card.name, card.suit)){
+           // dealing();
+        //}
+        console.log()
+        console.log(validatingCard(card.name, card.suit))   
 
         //If card is not in the hand player gets the card
         player.addCard(card);
@@ -130,11 +138,13 @@ function Round(){
     let validatingCard = function(cardName, cardSuit){
         let isSameCard = false;
         //Validates if array is empty
-        if (!player.cards.length){
+        if (player.cards.length !== 0){
             //Search over cards looking if the card already exists
             player.cards.forEach(userCard => {
-                if(userCard.name === cardName && userCard.suit === cardSuit)
+                if(userCard.name === cardName && userCard.suit === cardSuit){
                     isSameCard = true;
+                }
+                    
         })};
         return isSameCard;
         
@@ -146,7 +156,25 @@ function Round(){
 
 //Test
 const round = new Round();
+
 round.startGame();
+let rand1 = function(){
+    return Math.floor(Math.random()*13);
+
+}
+let rand2 = function(){
+    return Math.floor(Math.random()*4);
+}
+
+round.dealing(rand1(), rand2());
+round.dealing(rand1(), rand2());
+round.firstRound();
+
+console.log(rand1());
+console.log(rand1());
+console.log(rand1());
+console.log(rand1());
+
 
 
 
