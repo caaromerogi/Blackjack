@@ -185,6 +185,7 @@ function Round(){
         }      
     }
 
+    
     let checkIsInGame = function(){
         //Sum of card values of player hand
         let sum = player.sumCards();
@@ -234,7 +235,7 @@ function Round(){
             isInGame = false;}
 
         return isInGame;
-        }
+    }
 
     
 
@@ -253,9 +254,7 @@ function Round(){
             player.addCard(card);
         }else{
             //If cards is repeated the function is called again to generate a new card (Recursion)
-            newCard()}
-         
-            
+            newCard()}      
     }
 
     //Used to get random items from arrays cardName and suits
@@ -276,12 +275,8 @@ function Round(){
                 }
                     
         })};
-        return isSameCard;
-        
+        return isSameCard;   
     }
-
-    
-
 }
 
 //App execution
