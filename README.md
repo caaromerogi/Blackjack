@@ -4,7 +4,7 @@
 The Blackjack Game was developed using Javascript and using the node module "readline-sync" to get user input.
 
 ## Description
-The game was created using OOP approach with Javascript. The app has three "classes", those are Player, Card and Round. Player "class" has the name, the hand, the player's bag prize and methods to calculate stuff related with assign prize, get sum value of cards and push a new card in the hand. Card "class" has the name, value and suit of card and some getters and setters to set the name, suit and value. Finally, the class Round contains all related with the execution logic like start new game, play again, deal a card, validate if a card already exists in the hand of user, validate if player win, lose or want another card and exit etc.
+The game was created using OOP approach with Javascript. The app has three "classes", those are Player, Card and Round. Player "class" has the name, the hand, the player's bag prize and methods to calculate stuff related with assign prize, get sum value of cards and push a new card in the hand. Card "class" has the name, value and suit of card, getters and setters to set the name, suit and value and method to assign **value for ACE card** (You can see an example at the of this README). Finally, the class Round contains all related with the execution logic like start new game, play again, deal a card, validate if a card already exists in the hand of user, validate if player win, lose or want another card and exit etc.
 Class Card apply the encapsulation principle using "let" to declare private attributes because needs some additional validations to get and set values and Class Person doesn't apply this because overcomplicate the code unnecessarily.
 
 You win the game if you reach a score between 18 and 21, and you receive a prize of 1000 points, those will be accumulated in your prize bag.
@@ -19,6 +19,13 @@ Enjoy the game.
 
 ```
 node index.js
+```
+
+## If you get an error with readline-sync package...
+
+1. Execute the next line to install readline-sync node package
+```
+npm install readline-sync
 ```
 
 ## How it works?
