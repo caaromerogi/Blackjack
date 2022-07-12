@@ -1,9 +1,8 @@
 //--------------OBJECT CONSTRUCTORS-------------
 
 const { read } = require('fs');
-const { platform } = require('os');
 
-//Player
+//PLAYER COSNTRUCTOR
 function Player(name){
     this.name = name;
     this.prize = 0;
@@ -32,7 +31,7 @@ function Player(name){
 }
 
 
-//Card
+//CARD CONSTRUCTOR
 function Card(){
     //Declare attributes with let to encapsulate variables
     let name;
@@ -109,7 +108,7 @@ function Card(){
     
 }
 
-//Round
+//ROUND CONSTRUCTOR
 function Round(){
     let player = new Player();
     let cardNames = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
@@ -127,8 +126,6 @@ function Round(){
 
         //First round user receives 2 cards
         firstRound();
-        //Check if win, lose or still playing
-        checkIsInGame();
         //Ask for another round
         anotherRound();
 
@@ -136,10 +133,10 @@ function Round(){
 
     let playAgain = function() {
         console.log('Okay '+player.name+ '. Juguemos de nuevo');
+        //Clean array of cards
+        player.cards = [];
         //First round user receives 2 cards
         firstRound();
-        //Check if win, lose or still playing
-        checkIsInGame();
         //Ask for another round
         anotherRound();
     }
@@ -155,8 +152,10 @@ function Round(){
     }
 
     let anotherRound = function(){
+        //This variable receives the boolean isInGame from checkIsInGame function
+        let controlVariable = checkIsInGame();
         //If the value isInGame from checkIsInGame function is true then the player hasn't won and hasn't lose and ask for another card
-        if(checkIsInGame()){     
+        if(controlVariable){     
             //Giving new card       
             newCard();
             //Showing cards in hand
@@ -164,12 +163,12 @@ function Round(){
                 player.cards.forEach(card => { 
                 console.log(card.name+card.suit);  
             })
-            //Check again if the player is in game (Recursion)
-            checkIsInGame();    
+            //Check again if the player is in game 
+            anotherRound();
         }
 
         //If the value isInGame from checkIsInGame function is false then we ask to the player if he wants to play again
-        if (!checkIsInGame()){
+        if (!controlVariable){
             //Read input from user
             let readlineSync = require('readline-sync');
             let newGame = readlineSync.question('¿Quieres jugar otra vez? (Y/N): ');
@@ -177,12 +176,13 @@ function Round(){
             switch(newGame){
                 case 'Y':
                     playAgain();
+                    break;
                 default:
                     console.log('Nos veremos en otra ocasión, hasta luego!');
                     console.log('Tu premio acumulado es: '+player.prize);
+                    break;
             }
-        }
-           
+        }      
     }
 
     let checkIsInGame = function(){
@@ -215,6 +215,7 @@ function Round(){
 
         //If the sum is between 18 and 21 the player wins the game and add the prize to the bag prize and the control variable returns false
         if (sum>=18 && sum<= 21){
+            isInGame = false;
             console.log('Tus cartas suman ' + sum);
             console.log(":D Ganaste!! Puedes volver a jugar");
             //Adding prize
@@ -222,7 +223,7 @@ function Round(){
 
             console.log('Tu premio acumulado es: '+player.prize);
             //isInGame returns false because the game is finished because the player won
-            isInGame = false;}
+            }
         
         //If sum is over 21 the player lose, and the control variable isInGame returns false
         if (sum>21){
