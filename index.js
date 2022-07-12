@@ -54,7 +54,7 @@ function Card(){
                     break;
                 default: //If you get an Ace
                     //Ask to the user what does he want to do
-                    let aceChoice = readlineSync.question('\n El repartidor te dio un As \n Elija 1 o 2 entre las siguientes opciones \n 1. A = 1 \n 2. A = 11 \n')
+                    let aceChoice = readlineSync.question('\n El repartidor te dio un As \n Ingrese 1 o 2 para elegir una opcione \n 1. A = 1 \n 2. A = 11 \n')
                     switch(Number(aceChoice)){
                         case 1:
                             value = 1;
@@ -145,7 +145,8 @@ function Round(){
     let firstRound = function(){
         newCard();
         newCard();
-        console.log('Estas son sus cartas: ')
+        console.log("-------------------------")
+        console.log('\nEstas son sus cartas: ')
         player.cards.forEach(card => { 
             console.log(card.name+card.suit);  
         })
@@ -159,7 +160,7 @@ function Round(){
             //Giving new card       
             newCard();
             //Showing cards in hand
-            console.log('Estas son sus cartas: ')
+            console.log('\nEstas son sus cartas: ')
                 player.cards.forEach(card => { 
                 console.log(card.name+card.suit);  
             })
@@ -178,6 +179,7 @@ function Round(){
                     playAgain();
                     break;
                 default:
+                    console.log('-------------------------\n')
                     console.log('Nos veremos en otra ocasión, hasta luego!');
                     console.log('Tu premio acumulado es: '+player.prize);
                     break;
@@ -195,9 +197,10 @@ function Round(){
         //If the sum is below 18 then the player can chose between still playing or stop
         if (sum<18){
             console.log("Sus cartas suman "+ sum);
+            console.log("-------------------------");
             //Input from user
             let readlineSync = require('readline-sync');
-            let anotherCard = readlineSync.question('¿Desea otra carta? (Y/N): ');
+            let anotherCard = readlineSync.question('\n¿Desea otra carta? (Y/N): ');
 
             switch(anotherCard){
                 //If answer Y then we return true in control variable isInGame (The player is still playing)
@@ -207,6 +210,7 @@ function Round(){
                 //Another case (Answer is N) the player decides to stop the game, control variable isInGame returns false
                 default:
                     isInGame = false;
+                    console.log("-------------------------\n")
                     console.log('Tus cartas suman ' + sum);
                     console.log('Esta vez no fue suficiente, intenta de nuevo');
                     console.log('Tu premio acumulado es: '+player.prize);
@@ -217,6 +221,7 @@ function Round(){
         //If the sum is between 18 and 21 the player wins the game and add the prize to the bag prize and the control variable returns false
         if (sum>=18 && sum<= 21){
             isInGame = false;
+            console.log("-------------------------\n")
             console.log('Tus cartas suman ' + sum);
             console.log(":D Ganaste!! Puedes volver a jugar");
             //Adding prize
@@ -228,8 +233,9 @@ function Round(){
         
         //If sum is over 21 the player lose, and the control variable isInGame returns false
         if (sum>21){
+            console.log("-------------------------\n")
             console.log('Tus cartas suman ' + sum);
-            console.log(':( Perdiste, puedes intentarlo de nuevo');
+            console.log(':( Perdiste, te reto a hacerlo de nuevo!');
             console.log('Tu premio acumulado es: '+player.prize);
              //isInGame returns false because the game is finished because the player lost
             isInGame = false;}
