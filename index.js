@@ -114,7 +114,7 @@ function Round(name){
         document.getElementById("cardTwo").innerHTML = " / " + player.cards[1].name;
         document.getElementById("suitTwo").innerHTML = player.cards[1].suit;
 
-        document.getElementById("newCardButton")
+        document.getElementById("newCardButton").disabled = false;
         
         //Check if he wins
     }
