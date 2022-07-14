@@ -131,22 +131,32 @@ function Round() {
         player.name = name;
         player.cards = [];
 
-        //NOTA IMPORTANTE: REMOVER DIVS QUERYSELECTORALL (.ID SPAN)
+        //clean spans created for draw cards into div #cards
+        let container = document.querySelector('#cards');
+        let match = container.querySelectorAll('span');
 
-        newCard();
-        newCard();
+        match.forEach(span =>{
+            span.remove();
+        })
+
+        let card1 = newCard();
+        let card2 = newCard();
+        //Check if player won, lost or still playing
         checkIsInGame();
 
-        document.getElementById("cardOne").innerHTML = player.cards[0].name;
-        document.getElementById("suitOne").innerHTML = player.cards[0].suit;
-        document.getElementById("cardTwo").innerHTML = " / " + player.cards[1].name;
-        document.getElementById("suitTwo").innerHTML = player.cards[1].suit;
+        let card1HTML = document.createElement('span');
+        let card2HTML = document.createElement('span');
+        card1HTML.innerHTML = card1.name+card1.suit+" / "
+        card2HTML.innerHTML= card2.name+card2.suit
+
+        let div = document.getElementById('cards');
+        div.appendChild(card1HTML);
+        div.appendChild(card2HTML);
+
 
         document.getElementById("sum").innerHTML = player.sumCards();
         document.getElementById("drawCardButton").disabled = false;
 
-
-        //Check if he wins
     }
 
     //Giving a new card to the player
@@ -193,19 +203,6 @@ function Round() {
     }
     
 
-
-
-    let playAgain = function () {
-        console.log('Okay ' + player.name + '. Juguemos de nuevo');
-        //Clean array of cards
-        player.cards = [];
-        //First round user receives 2 cards
-        firstRound();
-        //Ask for another round
-        anotherRound();
-    }
-
-
     this.anotherRound = function () {
         //This variable receives the boolean isInGame from checkIsInGame function
         let controlVariable = checkIsInGame();
@@ -213,7 +210,7 @@ function Round() {
         if (controlVariable) {
             //Giving new card       
             let card = newCard();
-            //Showing cards in hand
+            //Showing card in hand
             let spanCards = document.createElement('span');
             spanCards.innerHTML = " / " + card.name+card.suit;
             let divCards = document.getElementById('cards');
@@ -246,8 +243,7 @@ function Round() {
             document.getElementById("name").innerHTML = ":D Has ganado, ¡te reto a hacerlo de nuevo!"
             document.getElementById("drawCardButton").disabled = true;
             //Adding prize
-            player.addPrize(prize);
-            
+            player.addPrize(prize); 
         }
 
         //Stop playing
@@ -260,6 +256,17 @@ function Round() {
 
 
         return isInGame;
+    }
+
+    
+    let playAgain = function () {
+        console.log('Okay ' + player.name + '. Juguemos de nuevo');
+        //Clean array of cards
+        player.cards = [];
+        //First round user receives 2 cards
+        firstRound();
+        //Ask for another round
+        anotherRound();
     }
 
 }
