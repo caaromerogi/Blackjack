@@ -1,6 +1,31 @@
-//--------------OBJECT CONSTRUCTORS-------------
+let name;
 
-const { read } = require('fs');
+document.getElementById("userNameButton").addEventListener("click", deleteFirstStage);
+
+function deleteFirstStage(){
+    
+    name = document.getElementById("userNameText").value;
+    const div = document.getElementById("containerUser");
+    div.remove();
+    unhideGameStage();    
+}
+
+function unhideGameStage(){
+    console.log(name);
+    const div = document.getElementById("game");
+    div.style.display = 'flex';
+    document.getElementById("name").innerHTML = name;
+
+
+
+document.getElementById("startGame").addEventListener("click", new Round(name).startGame);
+
+}
+
+
+
+
+//--------------OBJECT CONSTRUCTORS-------------
 
 //PLAYER COSNTRUCTOR
 function Player(name){
@@ -34,19 +59,18 @@ function Player(name){
 //CARD CONSTRUCTOR
 function Card(){
     //Declare attributes with let to encapsulate variables
-    let name;
-    let suit;
-    let value;
+    this.name;
+    this.suit;
+    this.value;
     //once you define the name call the function setValue to set the value
     
     
     this.setValue = function(){
         //Allows to get input from user
-        let readlineSync = require('readline-sync');
 
         //Validates regex (if is a letter)
-        if (/^[A-Za-z]+$/.test(name)){
-            switch(name){
+        if (/^[A-Za-z]+$/.test(this.name)){
+            switch(this.name){
                 case 'J':
                 case 'Q':
                 case 'K':
@@ -54,7 +78,7 @@ function Card(){
                     break;
                 default: //If you get an Ace
                     //Ask to the user what does he want to do
-                    let aceChoice = readlineSync.question('\n El repartidor te dio un As \n Ingrese 1 o 2 para elegir una opcion \n 1. A = 1 \n 2. A = 11 \n')
+                    let aceChoice = prompt('Ingrese 1 si desea que su A = 1, o 2 si desea que A = 11')
                     switch(Number(aceChoice)){
                         case 1:
                             value = 1;
@@ -70,66 +94,71 @@ function Card(){
         
     }
     
-
-    //Getter and Setter for card name property
-    Object.defineProperty(this, 'name',{
-        get: function(){
-            return name;    
-        },
-        set: function(value){
-            //Validates is a String
-            if(String(value)){
-                name = value; 
-                //call setValue function to modify de card value   
-            }
-                
-        }
-    });
-
-    //Getter and Setter for card suite property
-    Object.defineProperty(this, 'suit', {
-        get: function(){
-            return suit;    
-        },
-        set: function(value){
-            //Validates is a String
-            if(String(value)){
-                suit = value; 
-            }
-        }
-    })
-
-    //Getter value property
-    Object.defineProperty(this, 'value', {
-        get: function(){
-            return value;
-        }
-    })
     
 }
 
 //ROUND CONSTRUCTOR
-function Round(){
-    let player = new Player();
+function Round(name){
+    let player = new Player(name);
     let cardNames = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
     let suits = ['♣', '♦', '♥', '♠'];
     let prize = 1000;
 
-    //Starting game
+    //Starting game - button new game
     this.startGame = function(){
-        let readlineSync = require('readline-sync');
+        newCard();
+        newCard();
 
-        console.log("Bienvenido a Blackjack");
-        let userName = readlineSync.question('Por favor, ingresa tu nombre: ');
-        player.name = userName;
-        console.log('Comencemos '+ player.name);
+        document.getElementById("cardOne").innerHTML = player.cards[0].name;
+        document.getElementById("suitOne").innerHTML = player.cards[0].suit;
+        document.getElementById("cardTwo").innerHTML = " / " + player.cards[1].name;
+        document.getElementById("suitTwo").innerHTML = player.cards[1].suit;
 
-        //First round user receives 2 cards
-        firstRound();
-        //Ask for another round
-        anotherRound();
-
+        document.getElementById("newCardButton")
+        
+        //Check if he wins
     }
+
+    //Giving a new card to the player
+    let newCard = function(){
+        //Instanciates a new card each time the function is called
+        let card = new Card();
+        
+        //Giving the properties to the card
+        card.name = getRandomItem(cardNames);
+        card.suit = getRandomItem(suits);
+        card.setValue();
+        //Validating the card is not repeated
+        if (!sameCard(card.name, card.suite)){
+             //If is not the same card adds to the hand of player
+            player.addCard(card);
+        }else{
+            //If cards is repeated the function is called again to generate a new card (Recursion)
+            newCard()}      
+    }
+
+    //Used to get random items from arrays cardName and suits
+    let getRandomItem = function(item){
+        return item[Math.floor(Math.random()*item.length)]
+    }
+
+    
+    //Validating if a card already exists in the hand of player
+    let sameCard = function(drawCardName, drawCardSuit){
+        let isSameCard = false;
+        //Validates if array is empty
+        if (player.cards.length !== 0){
+            //Search over cards looking if the card already exists
+            player.cards.forEach(userCard => {
+                if(userCard.name === drawCardName && userCard.suit === drawCardSuit){
+                    isSameCard = true;
+                }
+                    
+        })};
+        return isSameCard;   
+    }
+
+
 
     let playAgain = function() {
         console.log('Okay '+player.name+ '. Juguemos de nuevo');
@@ -141,16 +170,10 @@ function Round(){
         anotherRound();
     }
 
-    //Starting the first round giving 2 cards to the user
-    let firstRound = function(){
-        newCard();
-        newCard();
-        console.log("-------------------------")
-        console.log('\nEstas son sus cartas: ')
-        player.cards.forEach(card => { 
-            console.log(card.name+card.suit);  
-        })
-    }
+
+    
+
+    
 
     let anotherRound = function(){
         //This variable receives the boolean isInGame from checkIsInGame function
@@ -196,12 +219,6 @@ function Round(){
 
         //If the sum is below 18 then the player can chose between still playing or stop
         if (sum<18){
-            console.log("Sus cartas suman "+ sum);
-            console.log("-------------------------");
-            //Input from user
-            let readlineSync = require('readline-sync');
-            let anotherCard = readlineSync.question('\n¿Desea otra carta? (Y/N): ');
-
             switch(anotherCard.toLowerCase()){
                 //If answer Y then we return true in control variable isInGame (The player is still playing)
                 case 'y':
@@ -210,87 +227,46 @@ function Round(){
                 //Another case (Answer is N) the player decides to stop the game, control variable isInGame returns false
                 default:
                     isInGame = false;
-                    console.log("-------------------------\n")
-                    console.log('Tus cartas suman ' + sum);
-                    console.log('Esta vez no fue suficiente, intenta de nuevo');
-                    console.log('Tu premio acumulado es: '+player.prize);
                     break;
             }
         }
 
         //If the sum is between 18 and 21 the player wins the game and add the prize to the bag prize and the control variable returns false
-        if (sum>=18 && sum<= 21){
+        if (sum === 21){
             isInGame = false;
-            console.log("-------------------------\n")
-            console.log('\nTus cartas suman ' + sum);
-            console.log(":D Ganaste!! Puedes volver a jugar");
             //Adding prize
-            player.addPrize(prize);
 
-            console.log('Tu premio acumulado es: '+player.prize);
-            console.log("-------------------------\n")
-            //isInGame returns false because the game is finished because the player won
+            //Agregar mensaje en html si gana
+
+
+            player.addPrize(prize);
             }
         
         //If sum is over 21 the player lose, and the control variable isInGame returns false
         if (sum>21){
-            console.log("-------------------------\n")
-            console.log('Tus cartas suman ' + sum);
-            console.log('\n:( Perdiste, te reto a hacerlo de nuevo!');
-            console.log('Tu premio acumulado es: '+player.prize);
-            console.log("-------------------------\n")
              //isInGame returns false because the game is finished because the player lost
             isInGame = false;}
+
+            //mensaje html
+
+            //falta mostrar la sum html
 
         return isInGame;
     }
 
     
 
-    //Giving a new card to the player
-    let newCard = function(){
-        //Instanciates a new card each time the function is called
-        let card = new Card();
-        
-        //Giving the properties to the card
-        card.name = getRandomItem(cardNames);
-        card.suit = getRandomItem(suits);
-        card.setValue();
-        //Validating the card is not repeated
-        if (!sameCard(card.name, card.suite)){
-             //If is not the same card adds to the hand of player
-            player.addCard(card);
-        }else{
-            //If cards is repeated the function is called again to generate a new card (Recursion)
-            newCard()}      
-    }
-
-    //Used to get random items from arrays cardName and suits
-    let getRandomItem = function(item){
-        return item[Math.floor(Math.random()*item.length)]
-    }
-
     
-    //Validating if a card already exists in the hand of player
-    let sameCard = function(drawCardName, drawCardSuit){
-        let isSameCard = false;
-        //Validates if array is empty
-        if (player.cards.length !== 0){
-            //Search over cards looking if the card already exists
-            player.cards.forEach(userCard => {
-                if(userCard.name === drawCardName && userCard.suit === drawCardSuit){
-                    isSameCard = true;
-                }
-                    
-        })};
-        return isSameCard;   
-    }
 }
 
 //App execution
-const round = new Round();
+
 //Start game
-round.startGame();
+//round.startGame();
+
+
+
+
 
 
 

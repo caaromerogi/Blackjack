@@ -7,25 +7,27 @@ body{
     margin: 0;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-image: linear-gradient(to bottom, #113817, #2C843C) ;
+    background-image: linear-gradient(to bottom, #203320, #24B324) ;
     font-family: 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 h1{
     text-align: center;
     font-size: 3rem;
+    font-style: italic;
     padding: 0.5rem;
     margin: 0.5px;
     color: #99A839;
+    
 }
 
-.containerUser{
+#containerUser{
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.childUser{
+#childUser{
     display: inline-block;
     font-size: 1.2rem;
     color: aliceblue;
@@ -45,3 +47,43 @@ h1{
     color: #1e661a;
 
 }
+
+#game{
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#game div {
+    padding: 1rem;
+    font-weight: bold;
+    color:rgb(243, 246, 201);
+    
+}
+
+#game button{
+    background-color: #bacd42;
+    color:#1e661a;
+    padding: 10px;
+    margin: 3px;
+    width: 120px;
+    height: 50px;
+    font-size: 1.2rem;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bold;
+}
+
+#game button:hover:enabled{
+    background-color: #185315;
+    color:#8fc08d ;
+}
+#game button:active:enabled{
+    background-color: #185315;
+    font-size: 1.1rem;
+    color:#8fc08d ;
+    width: 110px;
+    height: 45px;
+}
+
+

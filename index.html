@@ -10,11 +10,23 @@
 <body>
     <h1>Blackjack</h1>
 
-    <div class = 'containerUser'>
-        <p class="childUser">Please, insert your name to start: </p>
-        <input id = 'userNameText' type="text" name="" id="">
-        <button id = 'userNameButton'>Submit</button>
-    </div>    
+    <div id = 'containerUser'>
+        <p id="childUser">Please, insert your name to start: </p>
+        <input id = 'userNameText' type="text" autofocus>
+        <button id = 'userNameButton' type="submit">Submit</button>
+    </div>   
     
+    <div id ='game'>
+        <div>Let's start <span id = 'name'></span></div>
+        <div>Cards: <span id = "cardOne"></span> <span id = "suitOne"> </span> <span id = "cardTwo"></span> <span id = "suitTwo"></span> </div>
+        <div>Sum: <span id = "sum"></span></div>
+        <button id ="startGame">Start Game</button>
+        <button id = "newCardButton" disabled="disabled">New Card</button>
+    </div>
+
+    
+
+    <script src="index.js"></script>
+
 </body>
 </html>
