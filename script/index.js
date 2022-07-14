@@ -21,8 +21,7 @@ function unhideGameStage() {
 
 
 //--------------OBJECT CONSTRUCTORS-------------
-
-//PLAYER COSNTRUCTOR
+//PLAYER CONSTRUCTOR
 function Player() {
     this.name;
     this.prize = 0;
@@ -78,7 +77,7 @@ function Card() {
         } else {value = Number(name)}
 
         function aceCase() {
-            let aceChoice = prompt('Ingrese 1 si desea que su A = 1, o 2 si desea que A = 11')
+            let aceChoice = prompt('Dealer gives you an Ace \nWrite 1 if you wish A = 1, or 2 if you wish A = 11')
             switch (Number(aceChoice)) {
                 case 1:
                     value = 1;
@@ -93,7 +92,7 @@ function Card() {
 
     }
 
-    //Getter and Setter for card name property
+    //Getter and Setter for card name properties
     Object.defineProperty(this, 'name', {
         get: function () {
             return name;
@@ -107,7 +106,7 @@ function Card() {
         }
     });
 
-    //Getter and Setter for card name property
+    //Getter for value property
     Object.defineProperty(this, 'value', {
         get: function () {
             return value;
@@ -190,11 +189,9 @@ function Round() {
         card.setValue();
         //Validating the card is not repeated
         if (!sameCard(card.name, card.suit)) {
-            console.log("givin card: true")
             //If is not the same card adds to the hand of player
             player.addCard(card);
         } else {
-            console.log("giving card: false")
             //If cards is repeated the function is called again to generate a new card (Recursion)
             card = newCard();
         }
@@ -218,13 +215,11 @@ function Round() {
             player.cards.forEach(userCard => {
                 if (userCard.name === drawCardName && userCard.suit === drawCardSuit ) { 
                     isSameCard = true;
-                    console.log("in bucle: " +isSameCard);
                     return isSameCard;
                 }
 
             })
         }
-        console.log("Before out: "+isSameCard);
         return isSameCard;
     }
     
@@ -244,7 +239,7 @@ function Round() {
         if (sum === 21) {
             isInGame = false;
             document.getElementById("sum").innerHTML = player.sumCards();
-            document.getElementById("name").innerHTML = ":D Has ganado, ¡te reto a hacerlo de nuevo!"
+            document.getElementById("name").innerHTML = ":D You win, I challenge you to do it again!"
             document.getElementById("drawCardButton").disabled = true;
             //Adding prize
             player.addPrize(prize); 
@@ -254,7 +249,7 @@ function Round() {
         if (sum > 21) {
             isInGame = false;
             document.getElementById("sum").innerHTML = player.sumCards();
-            document.getElementById("name").innerHTML = "D: Has perdido, ¡puedes intentarlo nuevamente!"
+            document.getElementById("name").innerHTML = "D: You lose, You can try again!"
             document.getElementById("drawCardButton").disabled = true;
         }
 
