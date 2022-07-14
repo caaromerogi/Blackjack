@@ -54,8 +54,12 @@ function Player() {
 function Card() {
     //Declare attributes with let to encapsulate variables
     let name;
-    this.suit;
     let value;
+    let prize;
+    this.suit;
+    
+    
+    
     //once you define the name call the function setValue to set the value
 
 
@@ -68,13 +72,18 @@ function Card() {
                 case 'Q':
                 case 'K':
                     value = 10;
+                    prize = 500;
                     break;
                 default: //If you get an Ace
+                    prize = 500;
                     aceCase();
                     break;
             }
 
-        } else {value = Number(name)}
+        } else {
+            value = Number(name);
+            prize = 100;
+        }
 
         function aceCase() {
             let aceChoice = prompt('Dealer gives you an Ace \nWrite 1 if you wish A = 1, or 2 if you wish A = 11')
@@ -91,6 +100,7 @@ function Card() {
         }
 
     }
+
 
     //Getter and Setter for card name properties
     Object.defineProperty(this, 'name', {
@@ -113,6 +123,12 @@ function Card() {
         }
     });
 
+    //Getter for prize property
+    Object.defineProperty(this, 'prize', {
+        get: function () {
+            return prize;
+        }
+    });
 
 }
 
@@ -128,6 +144,7 @@ function Round() {
         //set the name and cleaning the array of cards to start a new game
         player.name = name;
         player.cards = [];
+        player.prize=0;
 
         document.getElementById("name").innerHTML = "Playing: "+player.name;
 
@@ -155,15 +172,16 @@ function Round() {
 
 
         document.getElementById("sum").innerHTML = player.sumCards();
-        document.getElementById("drawCardButton").disabled = false;
+        
+        
 
     }
 
     this.anotherRound = function () {
         //This variable receives the boolean isInGame from checkIsInGame function
-        let controlVariable = checkIsInGame();
+        //checkIsInGame();
         //If the value isInGame from checkIsInGame function is true then the player hasn't won and hasn't lose and ask for another card
-        if (controlVariable) {
+        if (checkIsInGame()) {
             //Giving new card       
             let card = newCard();
             //Showing card in hand
@@ -174,6 +192,8 @@ function Round() {
             document.getElementById("sum").innerHTML = player.sumCards();
             //Check again if the player is in game 
             checkIsInGame();
+        }else{
+            document.getElementById("drawCardButton").disabled = true;
         }
         
     }
@@ -187,10 +207,13 @@ function Round() {
         card.name = getRandomItem(cardNames);
         card.suit = getRandomItem(suits);
         card.setValue();
+        
+
         //Validating the card is not repeated
         if (!sameCard(card.name, card.suit)) {
             //If is not the same card adds to the hand of player
             player.addCard(card);
+            player.addPrize(card.prize);
         } else {
             //If cards is repeated the function is called again to generate a new card (Recursion)
             card = newCard();
@@ -233,16 +256,20 @@ function Round() {
         if (sum < 21) {
             isInGame = true;
             document.getElementById("sum").innerHTML = player.sumCards();
+            document.getElementById("prize").innerHTML = player.prize+ "$";
+            document.getElementById("drawCardButton").disabled = false;
+            
         }
 
         //Stop playing
         if (sum === 21) {
+            document.getElementById("drawCardButton").disabled = true;
             isInGame = false;
             document.getElementById("sum").innerHTML = player.sumCards();
             document.getElementById("name").innerHTML = ":D You win, I challenge you to do it again!"
-            document.getElementById("drawCardButton").disabled = true;
-            //Adding prize
-            player.addPrize(prize); 
+            
+            document.getElementById("prize").innerHTML = 1000+player.prize + "$";
+            player.prize = 0;
         }
 
         //Stop playing
@@ -251,6 +278,8 @@ function Round() {
             document.getElementById("sum").innerHTML = player.sumCards();
             document.getElementById("name").innerHTML = "D: You lose, You can try again!"
             document.getElementById("drawCardButton").disabled = true;
+            player.prize = 0;
+            document.getElementById("prize").innerHTML = player.prize + "$";
         }
 
         return isInGame;
