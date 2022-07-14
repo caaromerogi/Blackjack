@@ -69,10 +69,8 @@ function Card() {
                 case 'Q':
                 case 'K':
                     value = 10;
-                    
                     break;
                 default: //If you get an Ace
-                    //Ask to the user what does he want to do
                     aceCase();
                     break;
             }
@@ -128,8 +126,11 @@ function Round() {
 
     //Starting game - button new game
     this.startGame = function () {
+        //set the name and cleaning the array of cards to start a new game
         player.name = name;
         player.cards = [];
+
+        document.getElementById("name").innerHTML = "Playing: "+player.name;
 
         //clean spans created for draw cards into div #cards
         let container = document.querySelector('#cards');
@@ -159,6 +160,25 @@ function Round() {
 
     }
 
+    this.anotherRound = function () {
+        //This variable receives the boolean isInGame from checkIsInGame function
+        let controlVariable = checkIsInGame();
+        //If the value isInGame from checkIsInGame function is true then the player hasn't won and hasn't lose and ask for another card
+        if (controlVariable) {
+            //Giving new card       
+            let card = newCard();
+            //Showing card in hand
+            let spanCards = document.createElement('span');
+            spanCards.innerHTML = " / " + card.name+card.suit;
+            let divCards = document.getElementById('cards');
+            divCards.appendChild(spanCards);
+            document.getElementById("sum").innerHTML = player.sumCards();
+            //Check again if the player is in game 
+            checkIsInGame();
+        }
+        
+    }
+
     //Giving a new card to the player
     let newCard = function () {
         //Instanciates a new card each time the function is called
@@ -169,12 +189,14 @@ function Round() {
         card.suit = getRandomItem(suits);
         card.setValue();
         //Validating the card is not repeated
-        if (!sameCard(card.name, card.suite)) {
+        if (!sameCard(card.name, card.suit)) {
+            console.log("givin card: true")
             //If is not the same card adds to the hand of player
             player.addCard(card);
         } else {
+            console.log("giving card: false")
             //If cards is repeated the function is called again to generate a new card (Recursion)
-            newCard()
+            card = newCard();
         }
 
         return card;
@@ -192,38 +214,20 @@ function Round() {
         //Validates if array is empty
         if (player.cards.length !== 0) {
             //Search over cards looking if the card already exists
+            
             player.cards.forEach(userCard => {
-                if (userCard.name === drawCardName && userCard.suit === drawCardSuit) {
+                if (userCard.name === drawCardName && userCard.suit === drawCardSuit ) { 
                     isSameCard = true;
+                    console.log("in bucle: " +isSameCard);
+                    return isSameCard;
                 }
 
             })
-        };
+        }
+        console.log("Before out: "+isSameCard);
         return isSameCard;
     }
     
-
-    this.anotherRound = function () {
-        //This variable receives the boolean isInGame from checkIsInGame function
-        let controlVariable = checkIsInGame();
-        //If the value isInGame from checkIsInGame function is true then the player hasn't won and hasn't lose and ask for another card
-        if (controlVariable) {
-            //Giving new card       
-            let card = newCard();
-            //Showing card in hand
-            let spanCards = document.createElement('span');
-            spanCards.innerHTML = " / " + card.name+card.suit;
-            let divCards = document.getElementById('cards');
-            divCards.appendChild(spanCards);
-            document.getElementById("sum").innerHTML = player.sumCards();
-            //Check again if the player is in game 
-            checkIsInGame();
-        }
-
-        
-    }
-
-
     let checkIsInGame = function () {
         //Sum of card values of player hand
         let sum = player.sumCards();
@@ -254,20 +258,9 @@ function Round() {
             document.getElementById("drawCardButton").disabled = true;
         }
 
-
         return isInGame;
     }
 
-    
-    let playAgain = function () {
-        console.log('Okay ' + player.name + '. Juguemos de nuevo');
-        //Clean array of cards
-        player.cards = [];
-        //First round user receives 2 cards
-        firstRound();
-        //Ask for another round
-        anotherRound();
-    }
 
 }
 
