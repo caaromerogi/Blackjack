@@ -7,7 +7,7 @@ document.getElementById("drawCardButton").addEventListener("click", round.anothe
 function deleteFirstStage() {
 
     name = document.getElementById("userNameText").value;
-    const div = document.getElementById("containerUser");
+    const div = document.getElementById("user");
     div.remove();
     unhideGameStage();
 }
@@ -163,7 +163,7 @@ function Round() {
 
         let card1HTML = document.createElement('span');
         let card2HTML = document.createElement('span');
-        card1HTML.innerHTML = card1.name+card1.suit+" / "
+        card1HTML.innerHTML = card1.name+card1.suit+" - "
         card2HTML.innerHTML= card2.name+card2.suit
 
         let div = document.getElementById('cards');
@@ -186,7 +186,7 @@ function Round() {
             let card = newCard();
             //Showing card in hand
             let spanCards = document.createElement('span');
-            spanCards.innerHTML = " / " + card.name+card.suit;
+            spanCards.innerHTML = " - " + card.name+card.suit;
             let divCards = document.getElementById('cards');
             divCards.appendChild(spanCards);
             document.getElementById("sum").innerHTML = player.sumCards();

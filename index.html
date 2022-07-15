@@ -8,22 +8,30 @@
     <title>Blackjack</title>
 </head>
 <body>
-    <h1>Blackjack</h1>
+    <div id = 'blackjackSign'>
+        <div class = 'neonBlackjack'>
+            <h1>BLACKJACK</h1>
+            <span>CASINO</span>
+        </div>
+    </div>
 
-    <div id = 'containerUser'>
-        <p id="childUser">Please, insert your name to start: </p>
-        <input id = 'userNameText' type="text" autofocus>
-        <button id = 'userNameButton' type="submit">Submit</button>
-    </div>   
-    
     <div id ='game'>
         <div id = 'name'></div>
         <div id = "cards">Cards: </div>
         <div>Sum: <span id = "sum"></span></div>
-        <button id ="startGame">Start Game</button>
-        <button id = "drawCardButton" disabled="disabled">New Card</button>
         <div>Accumulated prize: <span id = 'prize'>0</span></div>
+        <div id ='buttons'>
+            <button id ="startGame">Start Game</button>
+            <button id = "drawCardButton" disabled="disabled">New Card</button>
+        </div>
     </div>
+
+    
+    <div id = 'user'>
+        <p id="user">Please, insert your name to start: </p>
+        <input id = 'userNameText' type="text" autofocus>
+        <button id = 'userNameButton' type="submit">Submit</button>
+    </div>  
     
 
     <script src="script/index.js"></script>
